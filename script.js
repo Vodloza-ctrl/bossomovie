@@ -1,3 +1,30 @@
+// ---------- SCROLL REVEAL ----------
+(function(){
+  const targets = document.querySelectorAll('.reveal, .reveal-stagger');
+  if(!('IntersectionObserver' in window) || !targets.length){
+    targets.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  targets.forEach(el => io.observe(el));
+})();
+
+// ---------- NAV SHADOW ON SCROLL ----------
+(function(){
+  const nav = document.querySelector('nav.site-nav');
+  if(!nav) return;
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive:true });
+})();
+
 // ---------- MUSIC PLAYER ----------
 (function(){
   const player = document.getElementById('player');
@@ -21,7 +48,6 @@
   });
   audio.addEventListener('ended', ()=> setPlaying(false));
 
-  // Also wire any "big play" buttons on the page (e.g. Sound section)
   document.querySelectorAll('[data-play-theme]').forEach(el=>{
     el.addEventListener('click', ()=>{
       if(audio.paused){
@@ -55,18 +81,21 @@ document.querySelectorAll('.menu-toggle').forEach(btn=>{
     list.style.display = open ? 'none' : 'flex';
     list.style.flexDirection = 'column';
     list.style.position = 'fixed';
-    list.style.top = '64px';
+    list.style.top = '68px';
     list.style.right = '20px';
-    list.style.background = '#000';
-    list.style.padding = '18px';
-    list.style.gap = '14px';
+    list.style.background = '#fff';
+    list.style.boxShadow = '0 20px 50px -12px rgba(23,22,15,0.18)';
+    list.style.borderRadius = '14px';
+    list.style.padding = '18px 24px';
+    list.style.gap = '16px';
+    list.style.zIndex = '200';
   });
 });
 
-// ---------- FORM FALLBACK (mailto until API is wired up) ----------
-// TODO: once the shared Cloudflare Worker/D1 API is deployed, set API_BASE
-// and swap this for a fetch() POST to the relevant endpoint.
-const API_BASE = "";
+// ---------- PARTNER FORM — wired to the live Worker on api.bossomovie.com ----------
+// Falls back to a mailto: draft if the API isn't reachable yet (e.g. before the
+// Worker is deployed, or the visitor is offline) so no inquiry is ever silently lost.
+const API_BASE = "https://api.bossomovie.com";
 
 function handleForm(formId, statusId, endpoint, successMsg, subjectLine){
   const form = document.getElementById(formId);
@@ -76,13 +105,6 @@ function handleForm(formId, statusId, endpoint, successMsg, subjectLine){
     e.preventDefault();
     status.textContent = 'Sending…';
     const data = Object.fromEntries(new FormData(form).entries());
-    if(!API_BASE){
-      status.textContent = 'Opening email fallback…';
-      const subject = encodeURIComponent(subjectLine);
-      const body = encodeURIComponent(JSON.stringify(data, null, 2));
-      window.location.href = `mailto:junzatv@gnail.com?subject=${subject}&body=${body}`;
-      return;
-    }
     try{
       const res = await fetch(`${API_BASE}${endpoint}`, {
         method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)
@@ -91,9 +113,12 @@ function handleForm(formId, statusId, endpoint, successMsg, subjectLine){
       status.textContent = successMsg;
       form.reset();
     }catch(err){
-      status.textContent = 'Something went wrong — please email junzatv@gnail.com directly.';
+      status.textContent = 'Opening email fallback…';
+      const subject = encodeURIComponent(subjectLine);
+      const body = encodeURIComponent(JSON.stringify(data, null, 2));
+      window.location.href = `mailto:junzatv@gnail.com?subject=${subject}&body=${body}`;
     }
   });
 }
 
-handleForm('partner-form','partner-status','/api/partner-inquiry','Thanks — we\'ll be in touch soon.','Partnership Inquiry');
+handleForm('partner-form','partner-status','/api/public/partner-lead','Thanks — we\'ll be in touch soon.','Partnership Inquiry');
