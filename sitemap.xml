@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://sitemaps.org">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bossomovie.com</loc>
+    <loc>https://bossomovie.com/</loc>
     <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://bossomovie.comfan-access.html</loc>
+    <loc>https://bossomovie.com/fan-access.html</loc>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://bossomovie.compartners.html</loc>
+    <loc>https://bossomovie.com/partners.html</loc>
     <priority>0.80</priority>
   </url>
 </urlset>
