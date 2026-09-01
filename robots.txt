@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bossomovie.com
+Sitemap: https://www.bossomovie.com/sitemap.xml

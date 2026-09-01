@@ -312,6 +312,26 @@ button.submit:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .contact-people .who{font-family:'Inter';font-size:0.88rem;line-height:1.9;color:var(--ink-soft);}
 .contact-people .who b{font-family:'JetBrains Mono';color:var(--accent);display:block;font-size:0.64rem;letter-spacing:0.06em;text-transform:uppercase;}
 
-/* ---------- TERMS ---------- */
+/* ---------- COLLABORATION / LOGO STRIP ---------- */
+.collab{padding:60px 0;}
+.collab-card{
+  display:flex;align-items:center;justify-content:center;gap:44px;flex-wrap:wrap;
+  padding:44px;text-align:center;
+}
+.collab-logos{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:center;}
+.collab-logos img{height:64px;width:auto;object-fit:contain;}
+.collab-logos .x{font-family:'Fraunces';font-size:1.4rem;color:var(--muted);font-style:italic;}
+.collab-copy{max-width:480px;text-align:left;}
+.collab-copy p{color:var(--ink-soft);font-size:0.98rem;}
+@media (max-width:780px){
+  .collab-card{flex-direction:column;text-align:center;}
+  .collab-copy{text-align:center;}
+}
+
+/* ---------- TRUST STRIP (logo variant) ---------- */
+.trust-logos{display:flex;align-items:center;gap:24px;}
+.trust-logos img{height:34px;width:auto;object-fit:contain;}
+.trust-logos .x{font-family:'Fraunces';font-style:italic;color:var(--muted);font-size:1rem;}
+
 .terms-block{background:var(--accent-soft);border-radius:var(--radius);padding:36px;}
 .terms-block p{color:var(--ink-soft);}
